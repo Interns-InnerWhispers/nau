@@ -1,5 +1,6 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
+const initDB = require('./initDB');
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -13,14 +14,18 @@ const pool = mysql.createPool({
   enableKeepAlive: true
 });
 
-// Test connection
+// Call init AFTER connection
 (async () => {
   try {
     const conn = await pool.getConnection();
-    console.log('✓ Database connected successfully');
+    console.log('✓ Database connected');
+
+    // 🔥 Call initDB here
+    await initDB();
+
     conn.release();
   } catch (err) {
-    console.error('✗ Database connection failed:', err.message);
+    console.error('✗ DB connection failed:', err.message);
   }
 })();
 
