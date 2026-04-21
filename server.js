@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config();
 const express = require('express');
 const cors    = require('cors');
 const helmet  = require('helmet');
@@ -34,7 +34,7 @@ const adminRoutes        = require('./routes/adminRoutes');
 const notificationsRoutes = require('./routes/notificationsRoutes');
 
 const app  = express();
-const PORT = 3006;
+const PORT = process.env.PORT || 3000;
 
 // ── Security headers ────────────────────────────────────────
 app.use(helmet({
@@ -53,7 +53,7 @@ app.use(helmet({
 
 // ── CORS ────────────────────────────────────────────────────
 app.use(cors({
-  origin: (process.env.CORS_ORIGIN || 'http://localhost:3006').split(','),
+  origin: ["https://www.innerwhispers.in"],
   credentials: true
 }));
 
@@ -65,11 +65,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(logging);
 app.use(sanitizeQuery);
 
-// ── Static files ─────────────────────────────────────────────
-app.use(express.static(path.join(__dirname, '../frontend')));
-// Serve HTML pages at root-relative paths
-app.use('/html', express.static(path.join(__dirname, '../frontend/html')));
-app.use('/images', express.static(path.join(__dirname, '../images')));
+
 
 // ── Health check (public) ─────────────────────────────────────
 app.get('/api/v1/health', (req, res) => {
@@ -100,9 +96,8 @@ app.use('/api/v1/admin',          adminRoutes);
 app.use('/api/v1/notifications',  notificationsRoutes);
 
 // ── SPA fallback ─────────────────────────────────────────────
-// Any non-API, non-static route returns the login page
-app.get(/^(?!\/api|\/html|\/images|\/css|\/js).*$/, (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/html/index.html'));
+app.get("/", (req, res) => {
+  res.send("NAU Backend Running 🚀");
 });
 
 // ── 404 for unmatched API routes ──────────────────────────────
