@@ -3,11 +3,11 @@
 -- Creates the production schema used by the Express backend and dynamic pages.
 -- ============================================================================
 
-CREATE DATABASE IF NOT EXISTS nau
+CREATE DATABASE IF NOT EXISTS u402126283_NAU
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
-USE nau;
+USE u402126283_NAU;
 
 -- ============================================================================
 -- CORE SYSTEM TABLES
